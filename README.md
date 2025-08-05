@@ -40,6 +40,11 @@ The scoreboard supports the following operations:
 1. 1 team can only attend 1 match at a time.
 2. Match start will be when a match is added to the score board (not when the match started in the past).
 
+## Additional prerequisites
+
+1. When providing summary if two matches have the same score and the same time of start order by home team names.
+2. The implementation does not specify the use of the library so we can expect malformed inputs.
+
 ## Score Board
 
 ### interface:
