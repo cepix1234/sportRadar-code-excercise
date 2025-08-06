@@ -1,4 +1,6 @@
-﻿namespace ScoreBoard.test.UnitTest_Match;
+﻿using ScoreBoard.Exceptions;
+
+namespace ScoreBoard.test.UnitTest_Match;
 
 [TestFixture]
 public class UnitTestMatchScoreAdd
@@ -33,7 +35,7 @@ public class UnitTestMatchScoreAdd
     [TestCase(-1,-1)]
     public void MatchAdd_NoNegativeScoresNoNegativeScores(int home, int away)
     {
-        Assert.Throws<Exception>(() => _match.Add(home, away));
+        Assert.Throws<MatchExceptions>(() => _match.Add(home, away));
     }
     
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
@@ -43,7 +45,7 @@ public class UnitTestMatchScoreAdd
 #pragma warning restore NUnit1001
     public void MatchAdd_ThrowsException_ProvidedScoreMustBeAnAbsoluteNumber(int home, int away)
     {
-        Assert.Throws<Exception>(() => _match.Add(home, away));
+        Assert.Throws<MatchExceptions>(() => _match.Add(home, away));
     }
     
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
@@ -56,6 +58,6 @@ public class UnitTestMatchScoreAdd
 #pragma warning restore NUnit1001
     public void MatchAdd__Fuzz_ThrowsException_ProvidedScoreMustBeAnAbsoluteNumber(int home, int away)
     {
-        Assert.Throws<Exception>(() => _match.Add(home, away));
+        Assert.Throws<MatchExceptions>(() => _match.Add(home, away));
     }
 }

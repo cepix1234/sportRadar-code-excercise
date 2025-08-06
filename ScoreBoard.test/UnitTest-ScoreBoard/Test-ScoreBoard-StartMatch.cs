@@ -1,4 +1,5 @@
-﻿using ScoreBoard.Interface;
+﻿using ScoreBoard.Exceptions;
+using ScoreBoard.Interface;
 
 namespace ScoreBoard.test.UnitTest_ScoreBoard;
 
@@ -26,7 +27,7 @@ public class UnitTestScoreBoardStartMatch
     public void NewMatchStart_ThrowsException_MatchWithProvidedTeamsExists()
     {
         _scoreBoard.StartMatch(_home, _away);
-        Assert.Throws<Exception>(() => _scoreBoard.StartMatch(_home, _away));
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.StartMatch(_home, _away));
     }
 
     [Test]
@@ -44,7 +45,7 @@ public class UnitTestScoreBoardStartMatch
     [Test]
     public void NewMatchStart_ThrowsException_HomeTeamAndAwayTeamShouldBeDifferent()
     {
-        Assert.Throws<Exception>(() => _scoreBoard.StartMatch("A", "A"));
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.StartMatch("A", "A"));
     }
     
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
@@ -60,7 +61,7 @@ public class UnitTestScoreBoardStartMatch
     [TestCase("","")]
     public void NewMatchStart_ThrowsException_ProvidedTeamNameIncorrectFormat(string home, string away)
     {
-        Assert.Throws<Exception>(() => _scoreBoard.StartMatch(home, away));
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.StartMatch(home, away));
     }
     
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
@@ -73,6 +74,6 @@ public class UnitTestScoreBoardStartMatch
 #pragma warning restore NUnit1001
     public void NewMatchStart_WithCustomInitialScore_ThrowsException_ProvidedScoreMustBeAnAbsoluteNumber(int homeScore, int awayScore)
     {
-        Assert.Throws<Exception>(() => _scoreBoard.StartMatch(_home, _away, (homeScore, awayScore)));
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.StartMatch(_home, _away, (homeScore, awayScore)));
     }
 }

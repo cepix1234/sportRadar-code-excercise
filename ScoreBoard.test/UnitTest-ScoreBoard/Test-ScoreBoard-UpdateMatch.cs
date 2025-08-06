@@ -1,4 +1,5 @@
-﻿using ScoreBoard.Interface;
+﻿using ScoreBoard.Exceptions;
+using ScoreBoard.Interface;
 
 namespace ScoreBoard.test.UnitTest_ScoreBoard;
 
@@ -45,14 +46,14 @@ public class UnitTestScoreBoardUpdateMatch
     [Test]
     public void UpdateMatch_ThrowsException_ProvidedMatchGuidDesNotExist()
     {
-        Assert.Throws<Exception>(() => _scoreBoard.UpdateMatch(Guid.NewGuid(), (1, 1)));
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.UpdateMatch(Guid.NewGuid(), (1, 1)));
     }
 
     [TestCase("SpainA")]
     [TestCase("BrazilA")]
     public void UpdateMatch_ThrowsException_ProvidedTeamNameDoesNotExist(string teamName)
     {
-        Assert.Throws<Exception>(() => _scoreBoard.UpdateMatch(teamName, (1, 1))); 
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.UpdateMatch(teamName, (1, 1))); 
     }
     
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
@@ -62,7 +63,7 @@ public class UnitTestScoreBoardUpdateMatch
 #pragma warning restore NUnit1001
     public void UpdateMatch_ThrowsException_ProvidedMatchGuidIsNotInCorrectFormat(Guid matchGuid)
     {
-        Assert.Throws<Exception>(() => _scoreBoard.UpdateMatch(matchGuid, (1, 1)));
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.UpdateMatch(matchGuid, (1, 1)));
     }
 
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
@@ -71,6 +72,6 @@ public class UnitTestScoreBoardUpdateMatch
 #pragma warning restore NUnit1001
     public void UpdateMatch_ThrowsException_ProvidedTeamNameIsNotInCorrectFormat(string teamName)
     {
-        Assert.Throws<Exception>(() => _scoreBoard.UpdateMatch(teamName, (1, 1))); 
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.UpdateMatch(teamName, (1, 1))); 
     }
 }

@@ -14,6 +14,11 @@ public class ScoreBoard : IScoreBoard
         throw new NotImplementedException();
     }
 
+    public Guid GetMatch(string teamName)
+    {
+        throw new NotImplementedException();
+    }
+
     public void UpdateMatch(Guid matchId, (int home, int away) score)
     {
         throw new NotImplementedException();

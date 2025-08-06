@@ -24,6 +24,14 @@ public interface IScoreBoard
     Guid StartMatch(string homeTeam, string awayTeam, (int home, int away) score);
 
     /// <summary>
+    /// Get Match Guid by any team name.
+    /// 
+    /// </summary>
+    /// <param name="teamName">Any team name</param>
+    /// <returns>Guid of the match</returns>
+    Guid GetMatch(string teamName);
+
+    /// <summary>
     /// For the match with the provided id, update the score to the provided score.
     /// </summary>
     /// <param name="matchId">Uniq match identifier.</param>

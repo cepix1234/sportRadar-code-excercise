@@ -1,4 +1,6 @@
-﻿namespace ScoreBoard.test.UnitTest_Match;
+﻿using ScoreBoard.Exceptions;
+
+namespace ScoreBoard.test.UnitTest_Match;
 
 [TestFixture]
 public class UnitTestMatchCompareMatches
@@ -18,7 +20,7 @@ public class UnitTestMatchCompareMatches
     {
         _match1.Update(2, 0);
         _match2.Update(1, 0);
-        Assert.Equals(_match1.Compare(_match2), -1);
+        Assert.That(-1, Is.EqualTo(_match1.Compare(_match2)));
     }
     
     [Test]
@@ -28,7 +30,7 @@ public class UnitTestMatchCompareMatches
         _match1._matchStart = 1;
         _match2.Update(2, 0);
         _match2._matchStart = 2;
-        Assert.Equals(_match1.Compare(_match2), -1);
+        Assert.That(-1, Is.EqualTo(_match1.Compare(_match2)));
     }
     
     [Test]
@@ -36,7 +38,7 @@ public class UnitTestMatchCompareMatches
     {
         _match1.Update(1, 0);
         _match2.Update(2, 0);
-        Assert.Equals(_match1.Compare(_match2), 1);
+        Assert.That(1, Is.EqualTo(_match1.Compare(_match2)));
     }
     
     [Test]
@@ -46,7 +48,7 @@ public class UnitTestMatchCompareMatches
         _match1._matchStart = 2;
         _match2.Update(2, 0);
         _match2._matchStart = 1;
-        Assert.Equals(_match1.Compare(_match2), 1);
+        Assert.That(1, Is.EqualTo(_match1.Compare(_match2)));
     }
     
     [Test]
@@ -58,7 +60,7 @@ public class UnitTestMatchCompareMatches
         _match2.Update(2, 0);
         _match2._homeTeamName= "B";
         _match2._matchStart = 1;
-        Assert.Equals(_match1.Compare(_match2), -1);
+        Assert.That(-1, Is.EqualTo(_match1.Compare(_match2)));
     }
     
     [Test]
@@ -70,12 +72,12 @@ public class UnitTestMatchCompareMatches
         _match2.Update(2, 0);
         _match2._homeTeamName= "A";
         _match2._matchStart = 1;
-        Assert.Equals(_match1.Compare(_match2), 1);
+        Assert.That(1, Is.EqualTo(_match1.Compare(_match2)));
     }
     
     [Test]
     public void MatchCompare_throwsException_ProvidedMatchMustNotBeNull()
     {
-        Assert.Throws<Exception>(() => _match1.Compare(null));
+        Assert.Throws<MatchExceptions>(() => _match1.Compare(null));
     }
 }

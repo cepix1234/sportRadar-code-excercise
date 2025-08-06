@@ -1,4 +1,5 @@
-﻿using ScoreBoard.Interface;
+﻿using ScoreBoard.Exceptions;
+using ScoreBoard.Interface;
 
 namespace ScoreBoard.test.UnitTest_ScoreBoard;
 
@@ -37,14 +38,14 @@ public class UnitTestScoreBoardFinishMatch
     [Test]
     public void FishMatch_ThrowsException_ProvidedMatchGuidDesNotExist()
     {
-        Assert.Throws<Exception>(() => _scoreBoard.FinishMatch(Guid.NewGuid())); 
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.FinishMatch(Guid.NewGuid())); 
     }
     
     [TestCase("SpainA")]
     [TestCase("BrazilA")]
     public void FishMatch_ThrowsException_ProvidedTeamNameDoesNotExist(string teamName)
     {
-        Assert.Throws<Exception>(() => _scoreBoard.FinishMatch(teamName)); 
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.FinishMatch(teamName)); 
     }
     
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
@@ -54,7 +55,7 @@ public class UnitTestScoreBoardFinishMatch
 #pragma warning restore NUnit1001
     public void FishMatch_ThrowsException_ProvidedMatchGuidIsNotInCorrectFormat(Guid matchGuid)
     {
-        Assert.Throws<Exception>(() => _scoreBoard.FinishMatch(matchGuid));
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.FinishMatch(matchGuid));
     }
 
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
@@ -63,6 +64,6 @@ public class UnitTestScoreBoardFinishMatch
 #pragma warning restore NUnit1001
     public void FishMatch_ThrowsException_ProvidedTeamNameIsNotInCorrectFormat(string teamName)
     {
-        Assert.Throws<Exception>(() => _scoreBoard.FinishMatch(teamName)); 
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.FinishMatch(teamName)); 
     }
 }

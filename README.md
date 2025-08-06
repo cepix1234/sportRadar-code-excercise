@@ -44,6 +44,7 @@ The scoreboard supports the following operations:
 
 1. When providing summary if two matches have the same score and the same time of start order by home team names.
 2. The implementation does not specify the use of the library so we can expect malformed inputs.
+3. The description does not specify in what kind of flow it will be used we can expect, a request will be made to get an existing match id.
 
 ## Score Board
 
@@ -51,6 +52,7 @@ The scoreboard supports the following operations:
 
 - StartMatch(string homeTeam, string awayTeam); Initial requirement start match.
 - StartMatch(string homeTeam, string awayTeam, (int home, int away) score); Additional requirement start match with a different starting score.
+- GetMatch(string teamName); Additional requirement get guid of match by providing any team name.
 - UpdateMatch(Guid matchId, (int home, int away) score); Initial requirement update match score by providing match ID.
 - UpdateMatch(string teamName, (int home, int away) score); Additional requirement update match score by providing any team name.
 - AddScore(Guid matchId, (int home, int away) score); Additional requirement add score by tuple, with provided match ID.
@@ -96,3 +98,4 @@ The scoreboard supports the following operations:
 - IncrementAway(); Increment away score by 1.
 - Compare(IMatch match); Compare with the provided mach first by score if the same then by time.
 - ToString(); Return string representation of the match in format `{homeTeamName}:{homeTeamScore} - {awayTeamName}:{awayTeamScore}`
+- ScoreSum(); Get the current sum of match score.

@@ -3,6 +3,27 @@ namespace ScoreBoard.Interface;
 public interface IMatch
 {
     /// <summary>
+    /// Get home team name.
+    /// </summary>
+    string HomeTeamName{ get; }
+    
+    /// <summary>
+    /// Get away team name.
+    /// </summary>
+    string AwayTeamName{ get; }
+    
+    /// <summary>
+    /// Get match start time.
+    /// </summary>
+    long MatchStart{ get; }
+    
+    // <summary>
+    /// Get match score sum.
+    /// </summary>
+    /// <returns>Sum of the current match score</returns>
+    int ScoreSum();
+    
+    /// <summary>
     /// Update the match score with the provided score.
     /// </summary>
     /// <param name="home">Home score to update the match with.</param>
