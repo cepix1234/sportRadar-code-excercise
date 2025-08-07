@@ -1,12 +1,13 @@
 ﻿using ScoreBoard.Exceptions;
 using ScoreBoard.Interface;
+using ScoreBoard.test.Test_Utils;
 
 namespace ScoreBoard.test.UnitTest_ScoreBoard;
 
 [TestFixture]
 public class UnitTestScoreBoardFinishMatch
 {
-    private ScoreBoardTest _scoreBoard;
+    private ScoreBoard _scoreBoard;
     static string _home = "Spain";
     static string _away = "Brazil";
     private Guid matchGuid;
@@ -14,7 +15,7 @@ public class UnitTestScoreBoardFinishMatch
     [SetUp]
     public void SetUp()
     {
-        _scoreBoard = new ScoreBoardTest();
+        _scoreBoard = new ScoreBoard();
         matchGuid = _scoreBoard.StartMatch(_home, _away);
     }
 
@@ -22,8 +23,8 @@ public class UnitTestScoreBoardFinishMatch
     public void FishMatch_CorrectlyRemoveItByProvidedMatchGuid()
     {
         _scoreBoard.FinishMatch(matchGuid);
-        _scoreBoard._matches.Keys.Contains(matchGuid);
-        Assert.Equals(_scoreBoard._matches.Keys.Contains(matchGuid), false);
+        Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
+        Assert.Equals(matches.Keys.Contains(matchGuid), false);
     }
     
     [TestCase("Spain")]
@@ -31,8 +32,8 @@ public class UnitTestScoreBoardFinishMatch
     public void FishMatch_CorrectlyRemoveItByAnyProvidedTeamName(string teamName)
     {
         _scoreBoard.FinishMatch(teamName);
-        _scoreBoard._matches.Keys.Contains(matchGuid);
-        Assert.Equals(_scoreBoard._matches.Keys.Contains(matchGuid), false);
+        Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
+        Assert.Equals(matches.Keys.Contains(matchGuid), false);
     }
     
     [Test]

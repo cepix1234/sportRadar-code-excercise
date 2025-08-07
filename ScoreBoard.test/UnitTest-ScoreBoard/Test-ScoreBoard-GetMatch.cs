@@ -6,7 +6,7 @@ namespace ScoreBoard.test.UnitTest_ScoreBoard;
 [TestFixture]
 public class UnitTestScoreBoardGetMatch
 {
-    private ScoreBoardTest _scoreBoard;
+    private ScoreBoard _scoreBoard;
     private string _home = "Spain";
     private string _away = "Brazil";
     private Guid _matchGuid;
@@ -14,7 +14,7 @@ public class UnitTestScoreBoardGetMatch
     [SetUp]
     public void SetUp()
     {
-        _scoreBoard = new ScoreBoardTest();
+        _scoreBoard = new ScoreBoard();
         _matchGuid = _scoreBoard.StartMatch(_home, _away);
         _scoreBoard.StartMatch("A", "B");
     }

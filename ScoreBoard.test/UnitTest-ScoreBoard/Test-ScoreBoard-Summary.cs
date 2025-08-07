@@ -1,17 +1,18 @@
 ﻿using System.Reflection;
 using ScoreBoard.Interface;
+using ScoreBoard.test.Test_Utils;
 
 namespace ScoreBoard.test.UnitTest_ScoreBoard;
 
 [TestFixture]
 public class UnitTestScoreBoardSummary
 {
-    private ScoreBoardTest _scoreBoard;
+    private ScoreBoard _scoreBoard;
 
     [SetUp]
     public void SetUp()
     {
-        _scoreBoard = new ScoreBoardTest();
+        _scoreBoard = new ScoreBoard();
     }
 
     [Test]
@@ -53,11 +54,11 @@ public class UnitTestScoreBoardSummary
         _scoreBoard.UpdateMatch("Germany", (1,0));
        
         // Alter the times for scenario where 2 matches start at the same time.
-        IMatch matchOne = _scoreBoard._matches[FirstMatch];
-        PropertyInfo propertyInfoOne = typeof(Match).GetProperty("_matchStart");
-        IMatch matchTwo= _scoreBoard._matches[SecondMatch];
-        PropertyInfo propertyInfoTwo= typeof(Match).GetProperty("_matchStart");
-        propertyInfoOne.SetValue(matchOne, propertyInfoTwo.GetValue(matchTwo));
+        Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
+        IMatch matchOne = matches[FirstMatch];
+        IMatch matchTwo= matches[SecondMatch];
+        long toSetTime = (long)PrivateValueAccessor.GetPrivateFieldValue(typeof(Match), "_matchStart",matchTwo);
+        PrivateValueAccessor.SetPrivateFieldValue(typeof(Match), "_matchStart", matchOne ,toSetTime);
         
         string result = _scoreBoard.Summary();
         string[] expected = new string[] { "Austria: 1 - Denmark: 2", "Slovenia: 1 - Croatia: 2", "Germany: 1 - Spain: 0"};

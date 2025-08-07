@@ -1,12 +1,13 @@
 ﻿using ScoreBoard.Exceptions;
 using ScoreBoard.Interface;
+using ScoreBoard.test.Test_Utils;
 
 namespace ScoreBoard.test.UnitTest_ScoreBoard;
 
 [TestFixture]
 public class UnitTestScoreBoardIncrement
 {
-    private ScoreBoardTest _scoreBoard;
+    private ScoreBoard _scoreBoard;
     static string _home = "Spain";
     static string _away = "Brazil";
     private Guid matchGuid;
@@ -14,7 +15,7 @@ public class UnitTestScoreBoardIncrement
     [SetUp]
     public void SetUp()
     {
-        _scoreBoard = new ScoreBoardTest();
+        _scoreBoard = new ScoreBoard();
         matchGuid = _scoreBoard.StartMatch(_home, _away);
     }
 
@@ -26,7 +27,8 @@ public class UnitTestScoreBoardIncrement
         {
             { matchGuid, new Match(_home, _away, (1, 0))}
         };
-        bool areEqual = result.Count == _scoreBoard._matches.Count && !_scoreBoard._matches.Except(result).Any();
+        Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
+        bool areEqual = result.Count == matches.Count && !matches.Except(result).Any();
         Assert.Equals(areEqual, true);
     }
 
@@ -39,7 +41,8 @@ public class UnitTestScoreBoardIncrement
         {
             { matchGuid, new Match(_home, _away, (1, 0))}
         };
-        bool areEqual = result.Count == _scoreBoard._matches.Count && !_scoreBoard._matches.Except(result).Any();
+        Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
+        bool areEqual = result.Count == matches.Count && !matches.Except(result).Any();
         Assert.Equals(areEqual, true);
     }
     
@@ -51,7 +54,8 @@ public class UnitTestScoreBoardIncrement
         {
             { matchGuid, new Match(_home, _away, (0, 1))}
         };
-        bool areEqual = result.Count == _scoreBoard._matches.Count && !_scoreBoard._matches.Except(result).Any();
+        Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
+        bool areEqual = result.Count == matches.Count && !matches.Except(result).Any();
         Assert.Equals(areEqual, true);
     }
 
@@ -64,7 +68,8 @@ public class UnitTestScoreBoardIncrement
         {
             { matchGuid, new Match(_home, _away, (0, 1))}
         };
-        bool areEqual = result.Count == _scoreBoard._matches.Count && !_scoreBoard._matches.Except(result).Any();
+        Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
+        bool areEqual = result.Count == matches.Count && !matches.Except(result).Any();
         Assert.Equals(areEqual, true);
     }
     

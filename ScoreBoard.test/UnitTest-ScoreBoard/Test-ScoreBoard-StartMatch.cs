@@ -1,5 +1,6 @@
 ﻿using ScoreBoard.Exceptions;
 using ScoreBoard.Interface;
+using ScoreBoard.test.Test_Utils;
 
 namespace ScoreBoard.test.UnitTest_ScoreBoard;
 
@@ -7,14 +8,14 @@ namespace ScoreBoard.test.UnitTest_ScoreBoard;
 [TestFixture]
 public class UnitTestScoreBoardStartMatch
 {
-    private ScoreBoardTest _scoreBoard;
+    private ScoreBoard _scoreBoard;
     private string _home = "Spain";
     private string _away = "Brazil";
 
     [SetUp]
     public void SetUp()
     {
-        _scoreBoard = new ScoreBoardTest();
+        _scoreBoard = new ScoreBoard();
     }
 
     [Test]
@@ -38,7 +39,8 @@ public class UnitTestScoreBoardStartMatch
         {
             { matchId, new Match(_home, _away, (home:1, away:2))}
         };
-        bool areEqual = result.Count == _scoreBoard._matches.Count && !_scoreBoard._matches.Except(result).Any();
+        Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
+        bool areEqual = result.Count == matches.Count && !matches.Except(result).Any();
         Assert.Equals(areEqual, true);
     }
     
