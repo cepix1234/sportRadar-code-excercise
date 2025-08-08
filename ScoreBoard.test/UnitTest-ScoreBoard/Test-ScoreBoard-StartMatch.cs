@@ -40,42 +40,35 @@ public class UnitTestScoreBoardStartMatch
             { matchId, new Match(_home, _away, (home:1, away:2))}
         };
         Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
-        bool areEqual = result.Count == matches.Count && !matches.Except(result).Any();
-        Assert.Equals(areEqual, true);
+        PrivateValueAccessor.SetPrivateFieldValue(typeof(Match), "_matchStart", result[matchId], matches[matchId].MatchStart);
+        bool areEqual = result.Count == matches.Count && matches[matchId].Compare(result[matchId]) == 0;
+        Assert.That(true, Is.EqualTo(areEqual));
     }
     
     [Test]
     public void NewMatchStart_ThrowsException_HomeTeamAndAwayTeamShouldBeDifferent()
     {
-        Assert.Throws<ScoreBoardException>(() => _scoreBoard.StartMatch("A", "A"));
+        Assert.Throws<MatchException>(() => _scoreBoard.StartMatch("A", "A"));
     }
     
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
-    [TestCase("A", null)]
-    [TestCase(null, "B")]
-    [TestCase(null,null)]
-    [TestCase(1,"A")]
-    [TestCase("A",1)]
-    [TestCase(1,1)]
+    [TestCase("A", null, typeof(MatchException))]
+    [TestCase(null, "B", typeof(MatchException))]
+    [TestCase(null,null, typeof(MatchException))]
 #pragma warning restore NUnit1001
-    [TestCase("","B")]
-    [TestCase("A","")]
-    [TestCase("","")]
-    public void NewMatchStart_ThrowsException_ProvidedTeamNameIncorrectFormat(string home, string away)
+    [TestCase("","B", typeof(MatchException))]
+    [TestCase("A","", typeof(MatchException))]
+    [TestCase("","", typeof(MatchException))]
+    public void NewMatchStart_ThrowsException_ProvidedTeamNameIncorrectFormat(string home, string away, Type e)
     {
-        Assert.Throws<ScoreBoardException>(() => _scoreBoard.StartMatch(home, away));
+        Assert.Throws(Is.TypeOf(e),() => _scoreBoard.StartMatch(home, away));
     }
     
-#pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
-    [TestCase(1, null)]
-    [TestCase(null, 1)]
-    [TestCase(null, null)]
-    [TestCase("A", 1)]
-    [TestCase(1,"A")]
-    [TestCase("A", "A")]
-#pragma warning restore NUnit1001
+    [TestCase(-1, 1)]
+    [TestCase(1, -1)]
+    [TestCase(-1, -1)]
     public void NewMatchStart_WithCustomInitialScore_ThrowsException_ProvidedScoreMustBeAnAbsoluteNumber(int homeScore, int awayScore)
     {
-        Assert.Throws<ScoreBoardException>(() => _scoreBoard.StartMatch(_home, _away, (homeScore, awayScore)));
+        Assert.Throws<MatchException>(() => _scoreBoard.StartMatch(_home, _away, (homeScore, awayScore)));
     }
 }

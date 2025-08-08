@@ -7,6 +7,9 @@ public class ScoreBoard : IScoreBoard
 {
     private Dictionary<Guid, IMatch> _matches;
     private Dictionary<string, Guid> _teamNameMatches;
+    
+    private static readonly ScoreBoardException TeamNameException = new("Team name not in correct format.");
+    private static readonly ScoreBoardException MatchIdException = new("Match id not in correct format.");
 
     public ScoreBoard()
     {
@@ -20,8 +23,12 @@ public class ScoreBoard : IScoreBoard
 
     public Guid StartMatch(string homeTeam, string awayTeam, (int home, int away) score)
     {
-        this.ValidateStartMatch(homeTeam, awayTeam);
-        IMatch match  = new Match(homeTeam, awayTeam, score);
+        IMatch match = new Match(homeTeam, awayTeam, score);
+        if (this._teamNameMatches.ContainsKey(homeTeam) || this._teamNameMatches.ContainsKey(awayTeam))
+        {
+            throw new ScoreBoardException("Match with this team already exists.");
+        }
+
         Guid matchId = Guid.NewGuid();
         this._matches.Add(matchId, match);
         this._teamNameMatches.Add(homeTeam, matchId);
@@ -31,8 +38,12 @@ public class ScoreBoard : IScoreBoard
 
     public Guid GetMatch(string teamName)
     {
-        this.ValidateTeamName(teamName);
-        return this._teamNameMatches[teamName];
+        Validator.ValidateTeamName(teamName, TeamNameException);
+        if (!this._teamNameMatches.TryGetValue(teamName, out Guid matchId))
+        {
+            throw new ScoreBoardException($"Match for team {teamName} not found");
+        }
+        return matchId;
     }
 
     public void UpdateMatch(Guid matchId, (int home, int away) score)
@@ -77,9 +88,8 @@ public class ScoreBoard : IScoreBoard
 
     public void FinishMatch(Guid matchId)
     {
-        this.ValidateMatchId(matchId);
-        IMatch match = this.GetMatchById(matchId);
-        if (match == null)
+        Validator.ValidateMatchId(matchId, MatchIdException);
+        if(!this._matches.TryGetValue(matchId, out var match))
         {
             throw new ScoreBoardException($"Match {matchId} not found");
         }
@@ -90,14 +100,13 @@ public class ScoreBoard : IScoreBoard
 
     public void FinishMatch(string teamName)
     {
-        this.ValidateTeamName(teamName);
-        Guid matchId = this._teamNameMatches[teamName];
-        if (matchId == Guid.Empty)
+        Validator.ValidateTeamName(teamName, TeamNameException);
+        
+        if(!this._teamNameMatches.TryGetValue(teamName, out var matchId))
         {
             throw new ScoreBoardException($"Match for team {teamName} not found");
         }
-        IMatch match = this._matches[matchId];
-        if (match == null)
+        if(!this._matches.TryGetValue(matchId, out var match))
         {
             throw new ScoreBoardException($"Match {matchId} not found");
         }
@@ -109,63 +118,34 @@ public class ScoreBoard : IScoreBoard
 
     public string Summary()
     {
-        
-        throw new NotImplementedException();
+        IMatch[] Array_matches = this._matches.Values.ToArray();
+        Array.Sort(Array_matches, (IMatch a, IMatch b) => a.Compare(b));
+
+        return String.Join("\n",Array.ConvertAll(Array_matches, (IMatch a) => a.ToString()));
     }
 
     private IMatch GetMatchById(Guid matchId)
     {
-        this.ValidateMatchId(matchId);
-        IMatch match = this._matches[matchId];
-        if (match == null)
+        Validator.ValidateMatchId(matchId, MatchIdException);
+        if (!this._matches.TryGetValue(matchId, out var match))
         {
             throw new ScoreBoardException($"Match {matchId} not found");
         }
+
         return match;
     }
     
     private IMatch GetMatchByTeamName(string teamName)
     {
-        this.ValidateTeamName(teamName);
-        Guid matchId = this._teamNameMatches[teamName];
-        if (matchId == Guid.Empty)
+        Validator.ValidateTeamName(teamName, TeamNameException);
+        if(!this._teamNameMatches.TryGetValue(teamName, out var matchId))
         {
             throw new ScoreBoardException($"Match for team {teamName} not found");
         }
-        IMatch match = this._matches[matchId];
-        if (match == null)
+        if (!this._matches.TryGetValue(matchId, out var match))
         {
             throw new ScoreBoardException($"Match {matchId} not found");
         }
         return match;
-    }
-
-    private void ValidateStartMatch(string homeTeam, string awayTeam)
-    {
-        if (homeTeam == awayTeam)
-        {
-            throw new ScoreBoardException("Team names must be different.");
-        }
-    }
-    
-    private void ValidateTeamName(string teamName)
-    {
-        if (String.IsNullOrEmpty(teamName))
-        {
-            throw new MatchExceptions("Team name cannot be null or empty.");
-        }
-
-        if (teamName.GetType() != typeof(string))
-        {
-            throw new MatchExceptions("Team name not in correct format.");
-        }
-    }
-    
-    private void ValidateMatchId(Guid matchId)
-    {
-        if (matchId.GetType() != typeof(Guid))
-        {
-            throw new ScoreBoardException("Match id not in correct format.");
-        }
     }
 }

@@ -28,8 +28,9 @@ public class UnitTestScoreBoardUpdateMatch
             { matchGuid, new Match(_home, _away, (1, 1))}
         };
         Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
-        bool areEqual = result.Count == matches.Count && !matches.Except(result).Any();
-        Assert.Equals(areEqual, true);
+        PrivateValueAccessor.SetPrivateFieldValue(typeof(Match), "_matchStart", result[matchGuid], matches[matchGuid].MatchStart);
+        bool areEqual = result.Count == matches.Count && matches[matchGuid].Compare(result[matchGuid]) == 0;
+        Assert.That(true, Is.EqualTo(areEqual));
     }
 
     [TestCase("Spain")]
@@ -42,8 +43,9 @@ public class UnitTestScoreBoardUpdateMatch
             { matchGuid, new Match(_home, _away, (1, 1))}
         };
         Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
-        bool areEqual = result.Count == matches.Count && !matches.Except(result).Any();
-        Assert.Equals(areEqual, true);
+        PrivateValueAccessor.SetPrivateFieldValue(typeof(Match), "_matchStart", result[matchGuid], matches[matchGuid].MatchStart);
+        bool areEqual = result.Count == matches.Count && matches[matchGuid].Compare(result[matchGuid]) == 0;
+        Assert.That(true, Is.EqualTo(areEqual));
     }
     
     [Test]
@@ -60,9 +62,7 @@ public class UnitTestScoreBoardUpdateMatch
     }
     
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
-    [TestCase("SpainB")]
     [TestCase(null)]
-    [TestCase(1)]
 #pragma warning restore NUnit1001
     public void UpdateMatch_ThrowsException_ProvidedMatchGuidIsNotInCorrectFormat(Guid matchGuid)
     {
@@ -70,7 +70,7 @@ public class UnitTestScoreBoardUpdateMatch
     }
 
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
-    [TestCase(1)]
+    [TestCase("")]
     [TestCase(null)]
 #pragma warning restore NUnit1001
     public void UpdateMatch_ThrowsException_ProvidedTeamNameIsNotInCorrectFormat(string teamName)

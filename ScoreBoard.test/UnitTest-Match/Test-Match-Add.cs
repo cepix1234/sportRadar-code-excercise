@@ -41,6 +41,6 @@ public class UnitTestMatchScoreAdd
     [TestCase(-1, -1)]
     public void MatchAdd_NoNegativeScoresNoNegativeScores(int home, int away)
     {
-        Assert.Throws<MatchExceptions>(() => _match.Add(home, away));
+        Assert.Throws<MatchException>(() => _match.Add(home, away));
     }
 }

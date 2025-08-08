@@ -24,7 +24,7 @@ public class UnitTestScoreBoardFinishMatch
     {
         _scoreBoard.FinishMatch(matchGuid);
         Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
-        Assert.Equals(matches.Keys.Contains(matchGuid), false);
+        Assert.AreEqual(matches.Keys.Contains(matchGuid), false);
     }
     
     [TestCase("Spain")]
@@ -33,7 +33,7 @@ public class UnitTestScoreBoardFinishMatch
     {
         _scoreBoard.FinishMatch(teamName);
         Dictionary<Guid, IMatch> matches = (Dictionary<Guid,IMatch>)PrivateValueAccessor.GetPrivateFieldValue(typeof(ScoreBoard), "_matches", _scoreBoard);
-        Assert.Equals(matches.Keys.Contains(matchGuid), false);
+        Assert.AreEqual(matches.Keys.Contains(matchGuid), false);
     }
     
     [Test]
@@ -50,9 +50,7 @@ public class UnitTestScoreBoardFinishMatch
     }
     
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
-    [TestCase("SpainB")]
     [TestCase(null)]
-    [TestCase(1)]
 #pragma warning restore NUnit1001
     public void FishMatch_ThrowsException_ProvidedMatchGuidIsNotInCorrectFormat(Guid matchGuid)
     {
@@ -60,7 +58,6 @@ public class UnitTestScoreBoardFinishMatch
     }
 
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
-    [TestCase(1)]
     [TestCase(null)]
 #pragma warning restore NUnit1001
     public void FishMatch_ThrowsException_ProvidedTeamNameIsNotInCorrectFormat(string teamName)

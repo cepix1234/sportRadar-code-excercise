@@ -11,10 +11,17 @@ public class Match : IMatch
 
     private int _homeScore;
     private int _awayScore;
+    
+    private static readonly MatchException TeamNameException = new("Team name not in correct format.");
+    private static readonly MatchException ScoreException = new("Score is not in correct format.");
+    private static readonly MatchException MatchUpdateException = new("Score can not be reduced.");
+    private static readonly MatchException MatchCompareException = new("Match type not in correct format."); 
+    private static readonly MatchException SameTeamNameException = new("Team names must be different.");
     public Match(string homeTeamName, string awayTeamName) : this(homeTeamName, awayTeamName, (0, 0)) { }
 
     public Match(string homeTeamName, string awayTeamName, (int home, int away) score)
     {
+        Validator.ValidateSameTeamName(homeTeamName, awayTeamName, SameTeamNameException);
         this.HomeTeamName = homeTeamName;
         this.AwayTeamName = awayTeamName;
         this.HomeScore = score.home;
@@ -24,13 +31,13 @@ public class Match : IMatch
 
     public string HomeTeamName
     {
-        private init { this.ValidateTeamName(value); this._homeTeamName = value; }
+        private init { Validator.ValidateTeamName(value, TeamNameException); this._homeTeamName = value; }
         get => this._homeTeamName;
     }
 
     public string AwayTeamName
     {
-        private init { this.ValidateTeamName(value); this._awayTeamName = value; }
+        private init { Validator.ValidateTeamName(value,TeamNameException ); this._awayTeamName = value; }
         get => this._awayTeamName;
     }
 
@@ -42,27 +49,27 @@ public class Match : IMatch
 
     private int HomeScore
     {
-        set { this.ValidateMatchScore(value); this._homeScore = value; }
+        set { Validator.ValidateMatchScore(value, ScoreException); this._homeScore = value; }
         get => this._homeScore;
     }
 
     private int AwayScore
     {
-        set { this.ValidateMatchScore(value); this._awayScore = value; }
+        set {Validator.ValidateMatchScore(value, ScoreException); this._awayScore = value; }
         get => this._awayScore;
     }
 
     public void Update(int home, int away)
     {
-        this.ValidateMatchUpdate((home, away));
+        Validator.ValidateMatchUpdate((this.HomeScore, this.AwayScore),(home, away), MatchUpdateException);
         this.HomeScore = home;
         this.AwayScore = away;
     }
 
     public void Add(int home, int away)
     {
-        this.ValidateMatchScore(home);
-        this.ValidateMatchScore(away);
+        Validator.ValidateMatchScore(home, TeamNameException);
+        Validator.ValidateMatchScore(away, TeamNameException);
         this.HomeScore += home;
         this.AwayScore += away;
     }
@@ -79,7 +86,7 @@ public class Match : IMatch
 
     public int Compare(IMatch match)
     {
-        this.ValidateMatchCompare(match);
+        Validator.ValidateMatchCompare(match,MatchCompareException);
         if (this.ScoreSum() < match.ScoreSum())
         {
             return 1;
@@ -91,11 +98,11 @@ public class Match : IMatch
 
         if (this._matchStart < match.MatchStart)
         {
-            return 1;
+            return -1;
         }
         else if (this._matchStart > match.MatchStart)
         {
-            return -1;
+            return 1;
         }
 
         return String.Compare(this._homeTeamName, match.HomeTeamName, StringComparison.Ordinal);
@@ -109,47 +116,5 @@ public class Match : IMatch
     public override string ToString()
     {
         return $"{this._homeTeamName}: {this._homeScore} - {this._awayTeamName}: {this._awayScore}";
-    }
-
-    private void ValidateTeamName(string teamName)
-    {
-        if (String.IsNullOrEmpty(teamName))
-        {
-            throw new MatchExceptions("Team name cannot be null or empty.");
-        }
-
-        if (teamName.GetType() != typeof(string))
-        {
-            throw new MatchExceptions("Team name not in correct format.");
-        }
-
-    }
-
-    private void ValidateMatchScore(int score)
-    {
-        if (score.GetType() != typeof(int) || score < 0)
-        {
-            throw new MatchExceptions("Team score not in correct format.");
-        }
-    }
-
-    private void ValidateMatchUpdate((int home, int away) score)
-    {
-        if (score.home < this._homeScore)
-        {
-            throw new MatchExceptions("Score can not reduce.");
-        }
-        if (score.away < this._awayScore)
-        {
-            throw new MatchExceptions("Score can not reduce.");
-        }
-    }
-
-    private void ValidateMatchCompare(IMatch match)
-    {
-        if (!(match is Match))
-        {
-            throw new MatchExceptions("Match type not in correct format.");
-        }
     }
 }

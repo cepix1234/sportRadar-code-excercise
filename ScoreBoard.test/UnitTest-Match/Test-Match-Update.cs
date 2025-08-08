@@ -33,6 +33,6 @@ public class UnitTestMatchScoreUpdate
     [TestCase(-1, -1)]
     public void MatchUpdate_UpdateScore_ThrowsException_ProvidedScoreMustBeAnAbsoluteNumber(int home, int away)
     {
-        Assert.Throws<MatchExceptions>(() => _match.Update(home, away));
+        Assert.Throws<MatchException>(() => _match.Update(home, away));
     }
 }

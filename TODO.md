@@ -9,10 +9,10 @@
   - [x] Implement Compare
   - [x] Implement ToString
 
-- [ ] Implement ScoreBoard class
-  - [ ] Implement StartMatch
-  - [ ] Implement UpdateMatch
-  - [ ] Implement AddScore
-  - [ ] Implement Increment
-  - [ ] Implement Summary
-  - [ ] Implement FinishMatch
+- [x] Implement ScoreBoard class
+  - [x] Implement StartMatch
+  - [x] Implement UpdateMatch
+  - [x] Implement AddScore
+  - [x] Implement Increment
+  - [x] Implement Summary
+  - [x] Implement FinishMatch

@@ -1,4 +1,4 @@
-﻿using ScoreBoard.Interface;
+﻿using ScoreBoard.Exceptions;
 
 namespace ScoreBoard.test.UnitTest_ScoreBoard;
 
@@ -31,16 +31,15 @@ public class UnitTestScoreBoardGetMatch
     [TestCase("BrazilA")]
     public void GetMatch_ThrowsException_ProvidedTeamNameDoesNotExist(string teamName)
     {
-        Assert.Throws<Exception>(() => _scoreBoard.GetMatch(teamName)); 
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.GetMatch(teamName)); 
     }
 
 #pragma warning disable NUnit1001 // Creation of Match should check the arguments are set correctly.
     [TestCase(null)]
-    [TestCase(1)]
 #pragma warning restore NUnit1001
     [TestCase("")]
     public void GetMatch_ThrowsException_ProvidedTeamNameIncorrectFormat(string teamName)
     {
-        Assert.Throws<Exception>(() => _scoreBoard.GetMatch(teamName));
+        Assert.Throws<ScoreBoardException>(() => _scoreBoard.GetMatch(teamName));
     }
 }
