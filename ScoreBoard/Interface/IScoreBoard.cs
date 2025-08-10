@@ -43,7 +43,6 @@ public interface IScoreBoard
     /// </summary>
     /// <param name="teamName">Name of any team in the match to update the score of.</param>
     /// <param name="score">Math score to update to (e.g. (home:1,away:0))</param>
-
     void UpdateMatch(string teamName, (int home, int away) score);
 
     /// <summary>
@@ -103,6 +102,6 @@ public interface IScoreBoard
     /// <summary>
     /// Get all ongoing matches order by total score and duration.
     /// </summary>
-    /// <returns>String table representation of ongoing matchers</returns>
+    /// <returns>String table representation of ongoing matches</returns>
     string Summary();
 }

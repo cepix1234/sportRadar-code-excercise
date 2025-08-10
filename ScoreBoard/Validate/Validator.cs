@@ -1,7 +1,7 @@
 using ScoreBoard.Exceptions;
 using ScoreBoard.Interface;
 
-namespace ScoreBoard;
+namespace ScoreBoard.Validate;
 
 public static class Validator
 {
